@@ -6,12 +6,18 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.rmrodrigues.network.wol.exceptions.UnableToWakeUpWOLNodeException;
 import com.rmrodrigues.network.wol.validator.MacAddressValidator;
 
 /**
  * The Class WOLNode.
  */
 public class WOLNode {
+
+	private static Log log = LogFactory.getLog(WOLNode.class);
 
 	/** The Constant EMPTY_STIRNG. */
 	private static final String EMPTY_STIRNG = "";
@@ -38,13 +44,21 @@ public class WOLNode {
 
 	/**
 	 * Wake up.
+	 * 
+	 * @throws UnableToWakeUpWOLNodeException
 	 */
-	public void wakeUP() {
+	public void wakeUP() throws UnableToWakeUpWOLNodeException {
+		log.debug("wakeUP():start");
 		try {
 			validate();
 			send();
 		} catch (Exception e) {
-			System.out.println("Erro:" + e.getLocalizedMessage());
+			log.error("An error has occurred while sending the magic package.",
+					e);
+			throw new UnableToWakeUpWOLNodeException(
+					"An error has occurred while sending the magic package.", e);
+		} finally {
+			log.debug("wakeUP():end");
 		}
 
 	}
@@ -56,14 +70,16 @@ public class WOLNode {
 	 *             the illegal argument exception
 	 */
 	private void validate() throws IllegalArgumentException {
-
+		log.debug("validate():start");
 		if (this.macAddress == null || this.macAddress != null
 				&& EMPTY_STIRNG.equals(this.macAddress.trim())) {
+			log.debug("validate():end");
 			throw new IllegalArgumentException(
 					"The Mac address must be provided.");
 		}
 
 		if (!MacAddressValidator.validate(macAddress)) {
+			log.debug("validate():start");
 			throw new IllegalArgumentException("Invalid MAC address.");
 		}
 
@@ -94,7 +110,7 @@ public class WOLNode {
 			socket.send(packet);
 			socket.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("An error has occurred while sending the datagram.", e);
 			throw e;
 		} finally {
 			if (socket != null) {
