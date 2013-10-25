@@ -134,7 +134,6 @@ public class WOLNode {
 	 * @return the string[]
 	 */
 	private String[] split() {
-		System.out.println("Split: " + macAddress);
 		List<String> splittedMac = new ArrayList<String>();
 		String[] result = new String[6];
 		for (int i = 0; i < macAddress.length(); i = i + 2) {
