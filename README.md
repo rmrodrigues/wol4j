@@ -5,7 +5,7 @@ A simple Java implementation of WOL(Wake-On-Lan).
 
 ##Usage
 ```java
-  WOLNode node = new WOLNode("00224d846c99");
+  WOLNode node = new WOLNode("002245bf6c99");
 		try {
 			node.wakeUP();
 		} catch (UnableToWakeUpWOLNodeException e) {
