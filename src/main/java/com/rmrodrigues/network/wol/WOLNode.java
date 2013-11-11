@@ -17,6 +17,7 @@ import com.rmrodrigues.network.wol.validator.MacAddressValidator;
  */
 public class WOLNode {
 
+	/** The log. */
 	private static Log log = LogFactory.getLog(WOLNode.class);
 
 	/** The Constant EMPTY_STIRNG. */
@@ -31,6 +32,12 @@ public class WOLNode {
 	/** The mac address. */
 	private String macAddress = null;
 
+	/** The broadcast ip. */
+	private String broadcastIP = null;
+
+	/** The broadcast port. */
+	private int broadcastPort;
+
 	/**
 	 * Instantiates a new wOL node.
 	 * 
@@ -40,12 +47,28 @@ public class WOLNode {
 	public WOLNode(String macAddress) {
 		super();
 		this.macAddress = macAddress;
+		this.broadcastIP = BROADCAST_IP;
+		this.broadcastPort = WOL_PORT;
+	}
+
+	/**
+	 * Instantiates a new wOL node.
+	 *
+	 * @param macAddress the mac address
+	 * @param broadcastIP the broadcast ip
+	 * @param broadcastPort the broadcast port
+	 */
+	public WOLNode(String macAddress, String broadcastIP, int broadcastPort) {
+		super();
+		this.macAddress = macAddress;
+		this.broadcastIP = broadcastIP;
+		this.broadcastPort = broadcastPort;
 	}
 
 	/**
 	 * Wake up.
-	 * 
-	 * @throws UnableToWakeUpWOLNodeException
+	 *
+	 * @throws UnableToWakeUpWOLNodeException the unable to wake up wol node exception
 	 */
 	public void wakeUP() throws UnableToWakeUpWOLNodeException {
 		log.debug("wakeUP():start");
@@ -103,9 +126,9 @@ public class WOLNode {
 				System.arraycopy(macBytes, 0, bytes, i, macBytes.length);
 			}
 
-			InetAddress address = InetAddress.getByName(BROADCAST_IP);
+			InetAddress address = InetAddress.getByName(this.broadcastIP);
 			DatagramPacket packet = new DatagramPacket(bytes, bytes.length,
-					address, WOL_PORT);
+					address, this.broadcastPort);
 			socket = new DatagramSocket();
 			socket.send(packet);
 			socket.close();
@@ -158,6 +181,43 @@ public class WOLNode {
 			bytes[i] = (byte) Integer.parseInt(hex[i], 16);
 		}
 		return bytes;
+	}
+
+	/**
+	 * Creates the.
+	 * 
+	 * @param macAddress
+	 *            the mac address
+	 * @return the wOL node
+	 */
+	public static WOLNode create(String macAddress) {
+		return new WOLNode(macAddress);
+	}
+
+	/**
+	 * Creates the.
+	 * 
+	 * @param macAddress
+	 *            the mac address
+	 * @param broadcast
+	 *            the broadcast
+	 * @param port
+	 *            the port
+	 * @return the wOL node
+	 */
+	public static WOLNode create(String macAddress, String broadcast, int port) {
+		return new WOLNode(macAddress, broadcast, port);
+	}
+
+	/**
+	 * Creates a WOLNode.
+	 *
+	 * @param macAddress the mac address
+	 * @param broadcast the broadcast
+	 * @return the wOL node
+	 */
+	public static WOLNode create(String macAddress, String broadcast) {
+		return new WOLNode(macAddress, broadcast, WOL_PORT);
 	}
 
 }
