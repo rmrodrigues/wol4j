@@ -6,7 +6,25 @@
 	<version>1.0.0</version>
 	<name>Java Wake-On-Lan Utility</name>
 	<description>A Java Utility that allows you wake up computers on LAN.</description>
-
+	<url>https://github.com/rmrodrigues/wol4j</url>
+	<licenses>
+		<license>
+			<name>The MIT License (MIT)</name>
+			<url>https://github.com/rmrodrigues/wol4j/blob/master/License.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>https://github.com/rmrodrigues/wol4j</url>
+		<connection>https://github.com/rmrodrigues/wol4j.git</connection>
+	</scm>
+	<developers>
+		<developer>
+			<id>rmrodrigues</id>
+			<name>Rui Rodrigues</name>
+			<email>rodrigues.rmb@gmail.com</email>
+		</developer>
+	</developers>
 	<dependencies>
 		<dependency>
 			<groupId>commons-logging</groupId>
